@@ -5,21 +5,50 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const apiCall = await fetch(apiKey);
             const data = await apiCall.json();
+            const fixturesByLeague = {}; // Objeto para almacenar los fixtures agrupados por liga
             const bringDivElement = document.getElementById('resultado');
 
-            if (data && data.result && bringDivElement) {
+            
+            if (data && data.result) {
                 data.result.forEach(element => {
-                    const createNewDivElement = document.createElement('div');
-                    createNewDivElement.style.backgroundColor = 'grey';
-                    createNewDivElement.style.margin = '5px';
-                    createNewDivElement.innerHTML = `
-                        <p>Fecha: ${element.event_date}</p>
-                        <p>Equipo Local: ${element.event_home_team}</p>
-                        <p>Equipo Visitante: ${element.event_away_team}</p>
-                        <p>Estadio: ${element.event_stadium}</p>
-                    `
-                    bringDivElement.appendChild(createNewDivElement);
+                    if (element.league_name) {
+                        // Verificar si la liga ya existe en el objeto, si no, crearla
+                        if(element.league_name == 'La Liga' || element.league_name == 'Premier League' && element.country_name == 'England' || element.league_name == 'Serie A' || element.league_name.includes('Liga Profesional Argentina')){
+                            
+                            if (!fixturesByLeague[element.league_name]) {
+                                fixturesByLeague[element.league_name] = [];
+                            }
+                            // Agregar el fixture al arreglo correspondiente a la liga
+                            fixturesByLeague[element.league_name].push(element);
+                        }
+                    }
                 });
+                
+                // Crear un div para cada liga y agregar los partidos correspondientes
+                for (const league in fixturesByLeague) {
+                    if (Object.hasOwnProperty.call(fixturesByLeague, league)) {
+                        const matches = fixturesByLeague[league];
+                        const leagueDiv = document.createElement('div');
+                        leagueDiv.innerHTML = `<h2>${league}</h2>`;
+                        leagueDiv.style.backgroundColor = 'grey';
+                        leagueDiv.style.margin = '5px';
+                        
+                        matches.forEach(match => {
+                            const matchInfo = document.createElement('p');
+                            matchInfo.innerHTML = `
+                                <p>Fecha: ${match.event_date}</p>
+                                <p>Equipo Local: ${match.event_home_team}</p>
+                                <p>Equipo Visitante: ${match.event_away_team}</p>
+                                <p>Estadio: ${match.event_stadium}</p>
+                            `;
+                            matchInfo.style.backgroundColor = '#D2CFD3';
+                            matchInfo.style.margin = '5px';
+                            leagueDiv.appendChild(matchInfo);
+                        });
+
+                        bringDivElement.appendChild(leagueDiv);
+                    }
+                }
             } else {
                 throw new Error(`Error de red: ${apiCall.status}`)
             }
