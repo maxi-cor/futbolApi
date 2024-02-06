@@ -36,10 +36,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         matches.forEach(match => {
                             const matchInfo = document.createElement('p');
                             matchInfo.innerHTML = `
-                                <p>Fecha: ${match.event_date}</p>
-                                <p>Equipo Local: ${match.event_home_team}</p>
-                                <p>Equipo Visitante: ${match.event_away_team}</p>
-                                <p>Estadio: ${match.event_stadium}</p>
+                            <p>Fecha: ${match.event_date}</p>
+                            <p>Equipo Local: ${match.event_home_team}</p>
+                            <img src="${match.home_team_logo}" alt="Logo Equipo Local" style="width: 50px; height: 50px;">
+                            <p>Equipo Visitante: ${match.event_away_team}</p>
+                            <img src="${match.away_team_logo}" alt="Logo Equipo Visitante" style="width: 50px; height: 50px;">
+                            <p>Estadio: ${match.event_stadium}</p>
                             `;
                             matchInfo.style.backgroundColor = '#D2CFD3';
                             matchInfo.style.margin = '5px';
