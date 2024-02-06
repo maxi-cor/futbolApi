@@ -1,41 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
     const apiKey = 'https://apiv2.allsportsapi.com/football/?met=Fixtures&APIkey=a4f5b4223f9e3010cc74e81538e9200e2410e3319a1c21bba5dfb7acc7a8e4bb&from=2024-02-05&to=2024-02-05';
-  
+
     const bringFixture = async () => {
         try {
-            const callApi = await fetch(apiKey);
-            if (!callApi.ok) {
-                throw new Error(`Error de red: ${callApi.status}`);
-            }
-            const data = await callApi.json();
-  
-            // Obtén el elemento HTML donde deseas mostrar la respuesta
-            const resultadoElemento = document.getElementById('resultado');
-  
-            // Verifica que el elemento exista antes de operar sobre él
-            if (resultadoElemento) {
-                // Itera sobre los elementos en data.result
-                data.result.forEach(fixture => {
-                    const fixtureElemento = document.createElement('div');
-  
-                    // Muestra información específica de cada fixture
-                    fixtureElemento.innerHTML = `
-                        <p>Fecha: ${fixture.event_date}</p>
-                        <p>Equipo Local: ${fixture.event_home_team}</p>
-                        <p>Equipo Visitante: ${fixture.event_away_team}</p>
-                        <p>Estadio: ${fixture.event_stadium}</p>
-                        <!-- Agrega más información según tus necesidades -->
-                    `;
-  
-                    resultadoElemento.appendChild(fixtureElemento);
+            const apiCall = await fetch(apiKey);
+            const data = await apiCall.json();
+            const bringDivElement = document.getElementById('resultado');
+
+            if (data && data.result && bringDivElement) {
+                data.result.forEach(element => {
+                    const createNewDivElement = document.createElement('div');
+                    createNewDivElement.style.backgroundColor = 'grey';
+                    createNewDivElement.style.margin = '5px';
+                    createNewDivElement.innerHTML = `
+                        <p>Fecha: ${element.event_date}</p>
+                        <p>Equipo Local: ${element.event_home_team}</p>
+                        <p>Equipo Visitante: ${element.event_away_team}</p>
+                        <p>Estadio: ${element.event_stadium}</p>
+                    `
+                    bringDivElement.appendChild(createNewDivElement);
                 });
             } else {
-                console.error('Elemento con ID "resultado" no encontrado.');
+                throw new Error(`Error de red: ${apiCall.status}`)
             }
         } catch (error) {
             console.error('Error:', error);
         }
     };
-  
+
     bringFixture();
-  });
+});
