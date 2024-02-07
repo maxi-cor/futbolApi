@@ -15,10 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Verificar si la liga ya existe en el objeto, si no, crearla
                         if(element.league_name == 'La Liga' || element.league_name == 'Premier League' && element.country_name == 'England' || element.league_name == 'Serie A' || element.league_name.includes('Liga Profesional Argentina')){
                             
-                            if (!fixturesByLeague[element.league_name]) {
-                                fixturesByLeague[element.league_name] = [];
+                            if (!fixturesByLeague[element.league_name]) {// si no existe
+                                fixturesByLeague[element.league_name] = []; // agregalo con un array vacio
                             }
-                            // Agregar el fixture al arreglo correspondiente a la liga
+                            // y si existe Agregar el fixture al arreglo correspondiente a la liga
                             fixturesByLeague[element.league_name].push(element);
                         }
                     }
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Crear un div para cada liga y agregar los partidos correspondientes
                 for (const league in fixturesByLeague) {
-                    if (Object.hasOwnProperty.call(fixturesByLeague, league)) {
+                    if (Object.hasOwnProperty.call(fixturesByLeague, league)) { // Esta línea verifica si la propiedad actual (league) es propia del objeto fixturesByLeague y no es una propiedad heredada de su prototipo.  Esta parte no es necesaria, segun chatGpt incluir esta verificación puede ser una práctica defensiva para garantizar que tu código funcione correctamente en diferentes contextos.
                         const matches = fixturesByLeague[league];
                         const leagueDiv = document.createElement('div');
                         leagueDiv.innerHTML = `<h2>${league}</h2>`;
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         leagueDiv.style.margin = '5px';
                         
                         matches.forEach(match => {
-                            const matchInfo = document.createElement('p');
+                            const matchInfo = document.createElement('div');
                             matchInfo.innerHTML = `
                             <p>Fecha: ${match.event_date}</p>
                             <p>Equipo Local: ${match.event_home_team}</p>
