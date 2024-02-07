@@ -1,5 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const apiKey = 'https://apiv2.allsportsapi.com/football/?met=Fixtures&APIkey=a4f5b4223f9e3010cc74e81538e9200e2410e3319a1c21bba5dfb7acc7a8e4bb&from=2024-02-05&to=2024-02-05';
+
+    const today = new Date();
+    const year = today.getFullYear();
+    // Los meses en JavaScript son indexados desde 0 (enero es 0, febrero es 1, etc.)
+    // Por lo tanto, necesitas agregar 1 al mes actual.
+    const month = today.getMonth() + 1;
+    const day = today.getDate();
+    const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
+    
+    const apiKey = `https://apiv2.allsportsapi.com/football/?met=Fixtures&APIkey=a4f5b4223f9e3010cc74e81538e9200e2410e3319a1c21bba5dfb7acc7a8e4bb&from=${formattedDate}&to=${formattedDate}`;
+    
 
     const bringFixture = async () => {
         try {
@@ -10,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             
             if (data && data.result) {
+                console.log(data.result)
                 data.result.forEach(element => {
                     if (element.league_name) {
                         // Verificar si la liga ya existe en el objeto, si no, crearla
